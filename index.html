@@ -236,6 +236,27 @@
     color: #dc2626; /* Este es el código del color rojo que usamos para errores */
     font-weight: bold; /* Opcional: Pone el texto en negrita para que resalte más */
 }
+/* Estilo para el Aviso de Privacidad */
+.privacy-notice {
+    background-color: #fff8e1; /* Fondo amarillo muy suave */
+    border-left: 5px solid #ffc107; /* Borde lateral amarillo/naranja */
+    padding: 15px;
+    margin-bottom: 20px;
+    font-size: 0.85rem;
+    color: #333;
+    text-align: justify;
+    line-height: 1.4;
+}
+
+.privacy-notice p {
+    margin: 5px 0;
+}
+
+.privacy-notice a {
+    color: #0d47a1; /* Azul oscuro para el enlace */
+    text-decoration: underline;
+    font-weight: bold;
+}
     </style>
 </head>
 <body>
@@ -297,6 +318,16 @@
             <!-- Sección 2: Datos Personales (Deshabilitada hasta validar CCT) -->
             <fieldset id="personal-data-section">
                 <legend>2. Datos del Asistente</legend>
+                    <!-- INICIO AVISO DE PRIVACIDAD -->
+    <div class="privacy-notice">
+        <p>LOS DATOS PERSONALES SERVIRÁN PARA FINES ESTADÍSTICOS Y COMPROBACIÓN DE GASTOS DE LOS RECURSOS PÚBLICOS UTILIZADOS PARA ESTE EVENTO;</p>
+        <p>
+            <a href="https://inaipyucatan.org.mx/transparencia/Protegetusdatospersonales/AvisosdePrivacidad.aspx" target="_blank">
+                Consultar Aviso de Privacidad Completo (Click aquí)
+            </a>
+        </p>
+    </div>
+    <!-- FIN AVISO DE PRIVACIDAD -->
                 
                 <div class="form-group">
                     <label for="nombreAsistente">Nombre Completo:</label>
