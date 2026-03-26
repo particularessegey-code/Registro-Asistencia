@@ -257,7 +257,24 @@
     text-decoration: underline;
     font-weight: bold;
 }
+#downloadBtn {
+    width: 100%;
+    cursor: pointer;
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+#downloadBtn:hover {
+    background-color: #15803d; /* Verde más oscuro al pasar el mouse */
+}
     </style>
+    <!-- Librería para generar PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -330,7 +347,7 @@
     <!-- FIN AVISO DE PRIVACIDAD -->
                 
                 <div class="form-group">
-                    <label for="nombreAsistente">Nombre Completo:</label>
+                    <label for="nombreAsistente">Nombres sin Apellidos:</label>
                     <input type="text" id="nombreAsistente" name="nombreAsistente" class="texto-mayusculas" required>
                 </div>
 
@@ -396,6 +413,7 @@
                 </div>
 
                 <button type="submit" id="submitBtn">Registrar Asistencia</button>
+                <button type="button" id="downloadBtn" style="display: none; background-color: #16a34a; margin-top: 10px;">📥 Descargar Comprobante PDF</button>
             </fieldset>
         </form>
     </div>
@@ -536,7 +554,7 @@
             }
         });
 
-        function resetFormState() {
+            function resetFormState() {
             escuelaValida = false;
             schoolSection.classList.remove('visible');
             personalSection.classList.remove('visible');
@@ -544,10 +562,22 @@
             // Limpiar campos readonly
             Object.values(camposEscuela).forEach(input => input.value = '');
             
-            // Opcional: Limpiar datos personales
-            // form.reset(); // Comentado para no borrar todo si el usuario solo se equivocó en un caracter del CCT
-        }
+            // --- NUEVO: LIMPIAR EL MENSAJE DE FEEDBACK ---
+            cctFeedback.textContent = '';          // Borra el texto "✅ Datos de escuela encontrados."
+            cctFeedback.className = 'validation-msg'; // Quita el color verde
+            cctInput.style.borderColor = 'var(--border-color)'; // Regresa el borde a gris
+            // ---------------------------------------------
 
+            // Resto del código de los botones (que ya teníamos)
+            const submitBtn = document.getElementById('submitBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            
+            submitBtn.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Registrar Asistencia';
+            
+            downloadBtn.style.display = 'none';
+        }
         // ==========================================
         // LÓGICA DE FORMATO DE TELÉFONO
         // ==========================================
@@ -666,19 +696,35 @@
                 const result = await response.json();
 
                 if (result.success) {
-                    showToast('¡Registro exitoso! Los datos han sido guardados.', 'success');
-                    form.reset();
-                    resetFormState();
-                    cctInput.dataset.nombreCache = '';
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                showToast('¡Registro exitoso! Los datos han sido guardados.', 'success');
+                
+                // Mostrar botón de descarga
+                submitBtn.style.display = 'none';
+                downloadBtn.style.display = 'block';
+
+                 // Guardar datos temporalmente para generar el PDF
+                window.datosRegistro = {
+                    nombre: nombre,
+                    paterno: paterno,
+                    materno: materno,
+                    escuela: camposEscuela.nombre.value,
+                    cct: cctInput.value,
+                    area: camposEscuela.area.value,         // NUEVO
+                    fechaEvento: camposEscuela.fechaEvento.value, // NUEVO
+                    fechaHora: new Date().toLocaleString('es-MX')
+                };
+
+                // NO reseteamos el formulario inmediatamente para que vean sus datos
+                // Si quieres que el formulario se limpie, descomenta la siguiente línea:
+                // form.reset(); resetFormState(); window.scrollTo(0,0);
+            } else {
+                // ... (tu código de error de duplicado sigue igual)
+                if (result.message === "DUPLICADO") {
+                    showToast('⚠️ Esta persona ya está registrada (Correo o Teléfono repetido).', 'error');
                 } else {
-                    // Manejo de errores específicos del servidor
-                    if (result.message === "DUPLICADO") {
-                        showToast('⚠️ Esta persona ya está registrada (Correo o Teléfono repetido).', 'error');
-                    } else {
-                        throw new Error('Error en el servidor');
-                    }
+                    throw new Error('Error en el servidor');
                 }
+            }
 
             } catch (error) {
                 console.error('Error submitting:', error);
@@ -710,6 +756,112 @@
                 setTimeout(() => toast.remove(), 300);
             }, 4000);
         }
+                // ==========================================
+        // FUNCIÓN PARA GENERAR PDF
+        // ==========================================
+                const downloadBtn = document.getElementById('downloadBtn');
+        
+        downloadBtn.addEventListener('click', () => {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            const data = window.datosRegistro;
+
+            // --- CAMBIO DE COLOR A ROJO GUINDA (RGB: 128, 0, 0) ---
+            doc.setFillColor(128, 0, 0); 
+            doc.rect(0, 0, 210, 20, 'F'); // Header rectangular
+            
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(16);
+            doc.text("COMPROBANTE DE REGISTRO", 105, 13, { align: "center" });
+
+            // Contenido
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(12);
+            
+            let y = 40;
+            const lineSpacing = 10;
+
+            // Nombre
+            doc.text(`Nombre Completo:`, 20, y);
+            doc.setFont("helvetica", "bold");
+            doc.text(`${data.nombre} ${data.paterno} ${data.materno}`, 70, y);
+            
+            y += lineSpacing;
+            doc.setFont("helvetica", "normal");
+            
+            // CCT
+            doc.text(`Clave CCT:`, 20, y);
+            doc.setFont("helvetica", "bold");
+            doc.text(`${data.cct}`, 70, y);
+
+            y += lineSpacing;
+            doc.setFont("helvetica", "normal");
+
+            // Escuela
+            doc.text(`Escuela:`, 20, y);
+            doc.setFont("helvetica", "bold");
+            // Ajustamos texto si el nombre es muy largo
+            const splitSchool = doc.splitTextToSize(`${data.escuela}`, 120);
+            doc.text(splitSchool, 70, y);
+            
+            // Si el nombre de la escuela ocupó varias líneas, bajamos la Y más
+            if (splitSchool.length > 1) {
+                y += (lineSpacing * (splitSchool.length - 1));
+            }
+
+            // --- NUEVO CAMPO: ÁREA ---
+            y += lineSpacing;
+            doc.setFont("helvetica", "normal");
+            doc.text(`Área:`, 20, y);
+            doc.setFont("helvetica", "bold");
+            doc.text(`${data.area}`, 70, y);
+
+            // --- NUEVO CAMPO: FECHA DE EVENTO ---
+            y += lineSpacing;
+            doc.setFont("helvetica", "normal");
+            doc.text(`Fecha del Evento:`, 20, y);
+            doc.setFont("helvetica", "bold");
+            doc.text(`${data.fechaEvento}`, 70, y);
+
+            // Fecha de Registro
+            y += lineSpacing;
+            doc.setFont("helvetica", "normal");
+            doc.text(`Fecha y Hora de Registro:`, 20, y);
+            doc.setFont("helvetica", "bold");
+            doc.text(`${data.fechaHora}`, 90, y);
+
+            // Nota legal pequeña
+            y += 30;
+            doc.setFontSize(9);
+            doc.setTextColor(100);
+            const nota = "Este documento es un comprobante digital de la captura de información en el sistema. La validez oficial se respalda en la base de datos del INAIP YUCATÁN.";
+            const splitTitle = doc.splitTextToSize(nota, 170);
+            doc.text(splitTitle, 20, y);
+
+            // Guardar el PDF
+            doc.save(`Comprobante_${data.paterno}_${data.nombre}.pdf`);
+            
+            showToast('PDF Generado. Preparando para nuevo registro...', 'success');
+
+            // --- NUEVO: LIMPIEZA AUTOMÁTICA DESPUÉS DE DESCARGAR ---
+            setTimeout(() => {
+                // 1. Limpiamos el formulario HTML
+                form.reset();
+                
+                // 2. Reseteamos el estado de la app (botones, validaciones)
+                resetFormState();
+                
+                // 3. Limpiamos la caché del CCT
+                cctInput.dataset.nombreCache = '';
+                cctInput.value = ''; // Limpiar el campo CCT visualmente
+
+                // 4. Ponemos el cursor listo para escribir el siguiente CCT
+                cctInput.focus();
+                
+                showToast('Listo para el siguiente registro', 'success');
+            }, 2000); // Espera 2 segundos para dar tiempo de ver el mensaje de éxito
+        });
     </script>
 </body>
 </html>
