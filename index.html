@@ -425,7 +425,7 @@
         // ==========================================
         // CONFIGURACIÓN: PEGA AQUÍ TU URL DE APPS SCRIPT
         // ==========================================
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyNtWHJaYFQYlUzT2O0mKv4EuriB4GSHaGvw9ijoibmfSd3xUmOjCVCFdfW2WD-wv2zqA/exec"; 
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwl25zj-TTqWllIlJhZF4gT_Pc47ZkLdfb8qcx6biwoJp1bkZIJVBTk21CX98pDHMy1bw/exec"; 
 
         // Referencias al DOM
         const cctInput = document.getElementById('cct');
@@ -685,7 +685,7 @@
 
             // Estado de carga
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Enviando y validando...';
+            submitBtn.textContent = 'Enviando y enviando correo...';
 
             try {
                 const response = await fetch(SCRIPT_URL, {
@@ -835,7 +835,7 @@
             y += 30;
             doc.setFontSize(9);
             doc.setTextColor(100);
-            const nota = "Este documento es un comprobante digital de la captura de información en el sistema. Los datos personales servirán para fines estadísticos y comprobación de gastos de los recursos públicos utilizados para este evento. El aviso de privacidad integral fue puesto a la vista de cada una de las personas y puede ser consultado en el siguiente vínculo. https://inaipyucatan.org.mx/transparencia/Protegetusdatospersonales/AvisosdePrivacidad.aspx";
+            const nota = "Este documento es un comprobante digital de la captura de información en el sistema. los datos personales servirán para fines estadísticos y comprobación de gastos de los recursos públicos utilizados para este evento. el aviso de privacidad integral fue puesto a la vista de cada una de las personas y puede ser consultado en el siguiente vínculo. https://inaipyucatan.org.mx/transparencia/Protegetusdatospersonales/AvisosdePrivacidad.aspx";
             const splitTitle = doc.splitTextToSize(nota, 170);
             doc.text(splitTitle, 20, y);
 
