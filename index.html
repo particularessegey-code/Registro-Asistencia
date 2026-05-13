@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro Cerrado - Escuelas Particulares</title>
+    <title>Registro de Asistentes - Escuelas Preescolares</title>
     <style>
         :root {
-            --primary-color: #800000; /* Rojo Guinda institucional */
-            --bg-color: #f8f9fa;
-            --text-color: #333333;
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f3f4f6;
             --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --border-color: #d1d5db;
+            --error-color: #dc2626;
+            --success-color: #16a34a;
         }
 
         body {
@@ -18,131 +22,853 @@
             color: var(--text-color);
             margin: 0;
             padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            line-height: 1.5;
         }
 
         .container {
+            max-width: 800px;
+            margin: 0 auto;
             background: var(--card-bg);
-            max-width: 700px;
-            width: 100%;
-            padding: 3rem 2rem;
+            padding: 2rem;
             border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
             text-align: center;
-            border-top: 8px solid var(--primary-color);
-        }
-
-        .icon-container {
-            margin-bottom: 1.5rem;
-        }
-
-        /* Icono de Reloj/Cierre hecho con CSS simple */
-        .lock-icon {
-            width: 80px;
-            height: 80px;
-            background-color: #fee2e2;
-            border-radius: 50%;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--primary-color);
-        }
-
-        .lock-icon svg {
-            width: 40px;
-            height: 40px;
-            fill: currentColor;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--bg-color);
+            padding-bottom: 1rem;
         }
 
         h1 {
             color: var(--primary-color);
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            line-height: 1.2;
+            margin: 0;
+            font-size: 1.8rem;
         }
 
-        .event-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #555;
-            margin-bottom: 2rem;
-            font-style: italic;
+        .subtitle {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        .alerta {
+            color: #F80000;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
         }
 
-        .message-box {
-            background-color: #fff8f8;
-            border: 1px solid #fca5a5;
+        form {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        fieldset {
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .message-box strong {
-            color: var(--primary-color);
-            display: block;
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .message-box p {
             margin: 0;
+            background-color: #fafafa;
+        }
+
+        legend {
+            font-weight: 600;
+            padding: 0 0.5rem;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            display: grid;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        label {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        select {
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
             font-size: 1rem;
-            color: #444;
+            transition: border-color 0.2s;
+            width: 100%;
+            box-sizing: border-box; /* Asegura que el padding no rompa el ancho */
         }
 
-        footer {
-            margin-top: 3rem;
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        input[readonly] {
+            background-color: #e5e7eb;
+            cursor: not-allowed;
+            color: #4b5563;
+        }
+
+        .validation-msg {
             font-size: 0.85rem;
-            color: #888;
-            border-top: 1px solid #eee;
-            padding-top: 1rem;
+            min-height: 1.2em;
+            margin-top: 0.2rem;
         }
 
-        @media (max-width: 600px) {
-            h1 { font-size: 1.5rem; }
-            .container { padding: 2rem 1rem; }
+        .error { color: var(--error-color); }
+        .success { color: var(--success-color); }
+
+        .radio-group {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 0.5rem;
         }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        button[type="submit"] {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            width: 100%;
+        }
+
+        button[type="submit"]:hover {
+            background-color: var(--primary-hover);
+        }
+
+        button[type="submit"]:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        /* Sección de datos de escuela oculta por defecto */
+        #school-data-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        #school-data-section.visible {
+            display: block;
+            opacity: 1;
+        }
+
+        #personal-data-section {
+            display: none; /* Se muestra solo si la escuela es válida */
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        #personal-data-section.visible {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Notificaciones (Toasts) */
+        #notification-area {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .toast {
+            background: #333;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            margin-top: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            animation: slideIn 0.3s ease-out forwards;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast.error { background: var(--error-color); }
+        .toast.success { background: var(--success-color); }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .loader {
+            display: none;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Responsive grid para campos de escuela */
+        .school-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        @media(min-width: 600px) {
+            .school-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .full-width {
+                grid-column: span 2;
+            }
+        }
+        /* Estilo para resaltar la fecha de evento */
+#fechaEvento {
+    color: #dc2626; /* Este es el código del color rojo que usamos para errores */
+    font-weight: bold; /* Opcional: Pone el texto en negrita para que resalte más */
+}
+/* Estilo para el Aviso de Privacidad */
+.privacy-notice {
+    background-color: #fff8e1; /* Fondo amarillo muy suave */
+    border-left: 5px solid #ffc107; /* Borde lateral amarillo/naranja */
+    padding: 15px;
+    margin-bottom: 20px;
+    font-size: 0.85rem;
+    color: #333;
+    text-align: justify;
+    line-height: 1.4;
+}
+
+.privacy-notice p {
+    margin: 5px 0;
+}
+
+.privacy-notice a {
+    color: #0d47a1; /* Azul oscuro para el enlace */
+    text-decoration: underline;
+    font-weight: bold;
+}
+#downloadBtn {
+    width: 100%;
+    cursor: pointer;
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+#downloadBtn:hover {
+    background-color: #15803d; /* Verde más oscuro al pasar el mouse */
+}
     </style>
+    <!-- Librería para generar PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
     <div class="container">
-        <!-- Icono Visual -->
-        <div class="icon-container">
-            <div class="lock-icon">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8C19.1,8 20,8.9 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.9 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z" />
-                </svg>
-            </div>
-        </div>
+        <header>
+            <h1>Registro de Asistencia</h1>
+            <p class="subtitle">REGISTRO CAPACITACIÓN PARA NIVEL PREESCOLAR AJUSTES DE MODELO ÚNICO DE ATENCIÓN INTEGRAL</p>
+            <!-- <p class="alerta">El registro finalizó para las escuelas de las áreas 1 a 26; solo el área 23 puede continuar con su registro.</p>-->
+        </header>
 
-        <!-- Título Principal -->
-        <h1>EL PERIODO DE REGISTRO HA FINALIZADO</h1>
+        <form id="registroForm" novalidate>
+            <!-- Sección 1: Búsqueda de CCT -->
+            <fieldset>
+                <legend>1. Datos de la Escuela</legend>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">Ingrese la Clave CCT de la escuela para autocompletar los datos y presione ENTER,TAB o fuera de la casilla.</p>
+                
+                <div class="form-group">
+                    <label for="cct">Clave C.C.T.:</label>
+                    <div style="display: flex; align-items: center;">
+                        <input type="text" id="cct" name="cct" class="texto-mayusculas" placeholder="Ej: 31PJN0000Z Escriba CCT y presione ENTER o TAB" required>
+                        <div class="loader" id="cctLoader"></div>
+                    </div>
+                    <div id="cctFeedback" class="validation-msg"></div>
+                </div>
 
-        <!-- Nombre del Evento -->
-        <p class="event-title">
-            "CAPACITACIÓN PARA NIVEL PREESCOLAR<br>AJUSTES DE MODELO ÚNICO DE ATENCIÓN INTEGRAL"
+                <!-- Datos Autocompletados (Ocultos hasta validar CCT) -->
+                <div id="school-data-section" class="school-grid">
+                    <div class="form-group full-width">
+                        <label for="nombreEscuela">Nombre de la Escuela:</label>
+                        <input type="text" id="nombreEscuela" name="nombreEscuela" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="nivel">Nivel:</label>
+                        <input type="text" id="nivel" name="nivel" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="municipio">Municipio:</label>
+                        <input type="text" id="municipio" name="municipio" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="localidad">Localidad:</label>
+                        <input type="text" id="localidad" name="localidad" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="area">Área:</label>
+                        <input type="text" id="area" name="area" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="visitador">Visitador:</label>
+                        <input type="text" id="visitador" name="visitador" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="fechaEvento">Fecha Evento:</label>
+                        <input type="text" id="fechaEvento" name="fechaEvento" readonly>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Sección 2: Datos Personales (Deshabilitada hasta validar CCT) -->
+            <fieldset id="personal-data-section">
+                <legend>2. Datos del Asistente</legend>
+                    <!-- INICIO AVISO DE PRIVACIDAD -->
+    <div class="privacy-notice">
+        <p>LOS DATOS PERSONALES SERVIRÁN PARA FINES ESTADÍSTICOS Y COMPROBACIÓN DE GASTOS DE LOS RECURSOS PÚBLICOS UTILIZADOS PARA ESTE EVENTO;</p>
+        <p>
+            <a href="https://inaipyucatan.org.mx/transparencia/Protegetusdatospersonales/AvisosdePrivacidad.aspx" target="_blank">
+                Consultar Aviso de Privacidad Completo (Click aquí)
+            </a>
         </p>
+    </div>
+    <!-- FIN AVISO DE PRIVACIDAD -->
+                
+                <div class="form-group">
+                    <label for="nombreAsistente">Nombres sin Apellidos:</label>
+                    <input type="text" id="nombreAsistente" name="nombreAsistente" class="texto-mayusculas" required>
+                </div>
 
-        <!-- Mensaje de Cierre -->
-        <div class="message-box">
-            <strong>FECHA LÍMITE ALCANZADA</strong>
-            <p>El sistema de captura cerró oficialmente el día <strong>19 de abril de 2026 a las 11:59 p.m.</strong></p>
-            <br>
-            <p>Ya no es posible realizar nuevos registros en este formulario.</p>
-        </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label for="apellidoPaterno">Apellido Paterno:</label>
+                        <input type="text" id="apellidoPaterno" name="apellidoPaterno" class="texto-mayusculas" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="apellidoMaterno">Apellido Materno:</label>
+                        <input type="text" id="apellidoMaterno" name="apellidoMaterno" class="texto-mayusculas" required>
+                    </div>
+                </div>
 
-        <p style="color: #666; font-size: 0.9rem;">
-            Si tienes alguna duda sobre tu registro previo, contacta al visitador de area.
-        </p>
+                <div class="form-group">
+                    <label for="correo">Correo Electrónico:</label>
+                    <input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com" required>
+                    <div id="correoFeedback" class="validation-msg"></div>
+                </div>
 
-        <footer>
-            &copy; 2026 DEPARTAMENTO DE ESCUELAS PARTICULARES
-        </footer>
+                <div class="form-group">
+                    <label for="telefono">Número Telefónico (10 dígitos):</label>
+                    <input type="tel" id="telefono" name="telefono" placeholder="XXX-XXXXXXX" maxlength="11" required>
+                    <small style="color: #666;">Formato: Lada (3) + Número (7)</small>
+                    <div id="telefonoFeedback" class="validation-msg"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="sexo">Sexo:</label>
+                    <select id="sexo" name="sexo" required>
+                        <option value="">-- Seleccione --</option>
+                        <option value="HOMBRE">HOMBRE</option>
+                        <option value="MUJER">MUJER</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>¿Habla alguna lengua indígena?</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="lenguaSi" name="lenguaIndigena" value="SI" required>
+                            <label for="lenguaSi">SI</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="lenguaNo" name="lenguaIndigena" value="NO">
+                            <label for="lenguaNo">NO</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>¿Presenta alguna discapacidad?</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="discapacidadSi" name="discapacidad" value="SI" required>
+                            <label for="discapacidadSi">SI</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="discapacidadNo" name="discapacidad" value="NO">
+                            <label for="discapacidadNo">NO</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" id="submitBtn">Registrar Asistencia</button>
+                <button type="button" id="downloadBtn" style="display: none; background-color: #16a34a; margin-top: 10px;">📥 Descargar Comprobante PDF</button>
+            </fieldset>
+        </form>
     </div>
 
+    <!-- Área para notificaciones flotantes -->
+    <div id="notification-area"></div>
+
+    <script>
+        // ==========================================
+        // CONFIGURACIÓN: PEGA AQUÍ TU URL DE APPS SCRIPT
+        // ==========================================
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwl25zj-TTqWllIlJhZF4gT_Pc47ZkLdfb8qcx6biwoJp1bkZIJVBTk21CX98pDHMy1bw/exec"; 
+
+        // Referencias al DOM
+        const cctInput = document.getElementById('cct');
+        const cctFeedback = document.getElementById('cctFeedback');
+        const cctLoader = document.getElementById('cctLoader');
+        
+        const schoolSection = document.getElementById('school-data-section');
+        const personalSection = document.getElementById('personal-data-section');
+        
+        const telefonoInput = document.getElementById('telefono');
+        const telefonoFeedback = document.getElementById('telefonoFeedback');
+        
+        const form = document.getElementById('registroForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // Campos de solo lectura para llenar
+        const camposEscuela = {
+            nombre: document.getElementById('nombreEscuela'),
+            nivel: document.getElementById('nivel'),
+            municipio: document.getElementById('municipio'),
+            localidad: document.getElementById('localidad'),
+            area: document.getElementById('area'),
+            visitador: document.getElementById('visitador'),
+            fechaEvento: document.getElementById('fechaEvento')
+        };
+
+        let escuelaValida = false;
+
+                // ==========================================
+        // FUNCIÓN CENTRALIZADA DE BÚSQUEDA
+        // ==========================================
+        async function buscarCCT() {
+            const cct = cctInput.value.trim();
+
+            if (!cct) {
+                resetFormState();
+                return;
+            }
+
+            // Validación simple para no buscar si ya cargamos este CCT
+            if (escuelaValida && camposEscuela.nombre.value === cctInput.dataset.nombreCache) {
+                return;
+            }
+
+            cctLoader.style.display = 'block';
+            cctFeedback.textContent = 'Buscando clave CCT...';
+            cctFeedback.className = 'validation-msg';
+            
+            try {
+                const url = `${SCRIPT_URL}?cct=${encodeURIComponent(cct)}`;
+                const response = await fetch(url);
+                const result = await response.json();
+
+                if (result.success) {
+                    // Llenar datos...
+                    camposEscuela.nombre.value = result.data.nombre;
+                    camposEscuela.nivel.value = result.data.nivel;
+                    camposEscuela.municipio.value = result.data.municipio;
+                    camposEscuela.localidad.value = result.data.localidad;
+                    camposEscuela.area.value = result.data.area;
+                    camposEscuela.visitador.value = result.data.visitador;
+                    camposEscuela.fechaEvento.value = result.data.fechaEvento;
+
+                    escuelaValida = true;
+                    cctInput.dataset.nombreCache = result.data.nombre;
+
+                    // UI Feedback
+                    cctFeedback.textContent = '✅ Datos de escuela encontrados.';
+                    cctFeedback.className = 'validation-msg success';
+                    cctInput.style.borderColor = 'var(--success-color)';
+
+                    schoolSection.classList.add('visible');
+                    personalSection.classList.add('visible');
+                    
+                    // Mover el foco al siguiente campo para agilizar el registro
+                    setTimeout(() => {
+                        schoolSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        document.getElementById('nombreAsistente').focus(); // Opcional: salta al nombre
+                    }, 500);
+
+                } else {
+                    throw new Error('No encontrado');
+                }
+
+            } catch (error) {
+                console.error(error);
+                escuelaValida = false;
+                resetFormState();
+                cctFeedback.textContent = '❌ Clave CCT no encontrada. Verifíquela. ¿Ya finalizó su tiempo de registro en el área de la 1 a la 26?';
+                cctFeedback.className = 'validation-msg error';
+                cctInput.style.borderColor = 'var(--error-color)';
+                
+            } finally {
+                cctLoader.style.display = 'none';
+            }
+        }
+
+        // ==========================================
+        // EVENTOS DEL INPUT CCT
+        // ==========================================
+        
+        // 1. Evento original: Salir del campo (Click fuera o Tab)
+        cctInput.addEventListener('blur', buscarCCT);
+
+        // 2. NUEVO: Evento para presionar ENTER
+        cctInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault(); // Evita que se envíe el formulario si se presiona enter aquí
+                buscarCCT();
+            }
+        });
+
+        // 3. Limpiar si se empieza a escribir de nuevo
+        cctInput.addEventListener('input', () => {
+            if (escuelaValida) {
+                resetFormState();
+                cctFeedback.textContent = '';
+                cctInput.style.borderColor = 'var(--border-color)';
+            }
+        });
+        // Limpiar formulario si el CCT cambia y se empieza a escribir de nuevo
+        cctInput.addEventListener('input', () => {
+            if (escuelaValida) {
+                resetFormState();
+                cctFeedback.textContent = '';
+                cctInput.style.borderColor = 'var(--border-color)';
+            }
+        });
+
+            function resetFormState() {
+            escuelaValida = false;
+            schoolSection.classList.remove('visible');
+            personalSection.classList.remove('visible');
+            
+            // Limpiar campos readonly
+            Object.values(camposEscuela).forEach(input => input.value = '');
+            
+            // --- NUEVO: LIMPIAR EL MENSAJE DE FEEDBACK ---
+            cctFeedback.textContent = '';          // Borra el texto "✅ Datos de escuela encontrados."
+            cctFeedback.className = 'validation-msg'; // Quita el color verde
+            cctInput.style.borderColor = 'var(--border-color)'; // Regresa el borde a gris
+            // ---------------------------------------------
+
+            // Resto del código de los botones (que ya teníamos)
+            const submitBtn = document.getElementById('submitBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            
+            submitBtn.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Registrar Asistencia';
+            
+            downloadBtn.style.display = 'none';
+        }
+        // ==========================================
+        // LÓGICA DE FORMATO DE TELÉFONO
+        // ==========================================
+        telefonoInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, ''); // Solo números
+            if (value.length > 10) value = value.slice(0, 10); // Max 10
+
+            // Formato XXX-XXXXXXX
+            if (value.length > 3) {
+                e.target.value = `${value.slice(0, 3)}-${value.slice(3)}`;
+            } else {
+                e.target.value = value;
+            }
+
+            // Validación en tiempo real
+            if (value.length === 10) {
+                telefonoFeedback.textContent = '✅ Formato correcto';
+                telefonoFeedback.className = 'validation-msg success';
+            } else {
+                telefonoFeedback.textContent = 'Faltan dígitos (requiere 10)';
+                telefonoFeedback.className = 'validation-msg error';
+            }
+        });
+
+                // ==========================================
+        // ENVÍO DEL FORMULARIO
+        // ==========================================
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // 1. Validar Escuela
+            if (!escuelaValida) {
+                showToast('Error: Debe validar una escuela antes de enviar.', 'error');
+                cctInput.focus();
+                return;
+            }
+
+            // 2. Validación Estrita de Campos Vacíos
+            const nombre = document.getElementById('nombreAsistente').value.trim();
+            const paterno = document.getElementById('apellidoPaterno').value.trim();
+            const materno = document.getElementById('apellidoMaterno').value.trim();
+            const correo = document.getElementById('correo').value.trim();
+            const telefono = document.getElementById('telefono').value.trim();
+            const sexo = document.getElementById('sexo').value;
+            
+            // Validar Radios (Lengua y Discapacidad)
+            const lenguaRadio = document.querySelector('input[name="lenguaIndigena"]:checked');
+            const discapacidadRadio = document.querySelector('input[name="discapacidad"]:checked');
+
+            if (!nombre || !paterno || !materno || !correo || !telefono) {
+                showToast('Por favor, llene todos los campos de texto.', 'error');
+                return;
+            }
+
+            if (!sexo) {
+                showToast('Por favor, seleccione el sexo.', 'error');
+                return;
+            }
+
+            if (!lenguaRadio) {
+                showToast('Por favor, indique si habla alguna lengua indígena.', 'error');
+                return;
+            }
+
+            if (!discapacidadRadio) {
+                showToast('Por favor, indique si presenta alguna discapacidad.', 'error');
+                return;
+            }
+
+            // 3. Validación de Teléfono (Formato)
+            const telefonoLimpio = telefono.replace(/\D/g, '');
+            if (telefonoLimpio.length !== 10) {
+                showToast('El teléfono debe tener exactamente 10 dígitos.', 'error');
+                telefonoInput.focus();
+                return;
+            }
+
+            // 4. Validación de Correo (Básica)
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(correo)) {
+                showToast('Ingrese un correo electrónico válido.', 'error');
+                document.getElementById('correo').focus();
+                return;
+            }
+
+            // Preparar datos
+            const formData = {
+                cct: cctInput.value,
+                nombre: camposEscuela.nombre.value,
+                nivel: camposEscuela.nivel.value,
+                municipio: camposEscuela.municipio.value,
+                localidad: camposEscuela.localidad.value,
+                area: camposEscuela.area.value,
+                visitador: camposEscuela.visitador.value,
+                fechaEvento: camposEscuela.fechaEvento.value,
+                nombreAsistente: nombre,
+                apellidoPaterno: paterno,
+                apellidoMaterno: materno,
+                correo: correo,
+                telefono: telefono,
+                sexo: sexo,
+                lenguaIndigena: lenguaRadio.value,
+                discapacidad: discapacidadRadio.value
+            };
+
+            // Estado de carga
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Enviando y enviando correo...';
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+
+                if (result.success) {
+                showToast('¡Registro exitoso! Los datos han sido guardados.', 'success');
+                
+                // Mostrar botón de descarga
+                submitBtn.style.display = 'none';
+                downloadBtn.style.display = 'block';
+
+                 // Guardar datos temporalmente para generar el PDF
+                window.datosRegistro = {
+                    nombre: nombre,
+                    paterno: paterno,
+                    materno: materno,
+                    escuela: camposEscuela.nombre.value,
+                    cct: cctInput.value,
+                    area: camposEscuela.area.value,         // NUEVO
+                    fechaEvento: camposEscuela.fechaEvento.value, // NUEVO
+                    fechaHora: new Date().toLocaleString('es-MX')
+                };
+
+                // NO reseteamos el formulario inmediatamente para que vean sus datos
+                // Si quieres que el formulario se limpie, descomenta la siguiente línea:
+                // form.reset(); resetFormState(); window.scrollTo(0,0);
+            } else {
+                // ... (tu código de error de duplicado sigue igual)
+                if (result.message === "DUPLICADO") {
+                    showToast('⚠️ Esta persona ya está registrada (Correo o Teléfono repetido).', 'error');
+                } else {
+                    throw new Error('Error en el servidor');
+                }
+            }
+
+            } catch (error) {
+                console.error('Error submitting:', error);
+                showToast('Hubo un error al conectar con Google Sheets. Intente nuevamente.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Registrar Asistencia';
+            }
+        });
+
+        // ==========================================
+        // UTILIDAD: NOTIFICACIONES (TOASTS)
+        // ==========================================
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('notification-area');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            // Icono simple
+            const icon = type === 'success' ? '✅' : '⚠️';
+            
+            toast.innerHTML = `<span>${icon}</span><span>${message}</span>`;
+            
+            container.appendChild(toast);
+
+            // Eliminar después de 4 segundos
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+                // ==========================================
+        // FUNCIÓN PARA GENERAR PDF
+        // ==========================================
+                const downloadBtn = document.getElementById('downloadBtn');
+        
+        downloadBtn.addEventListener('click', () => {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            const data = window.datosRegistro;
+
+            // --- CAMBIO DE COLOR A ROJO GUINDA (RGB: 128, 0, 0) ---
+            doc.setFillColor(128, 0, 0); 
+            doc.rect(0, 0, 210, 20, 'F'); // Header rectangular
+            
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(16);
+            doc.text("COMPROBANTE DE REGISTRO", 105, 13, { align: "center" });
+
+            // Contenido
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(12);
+            
+            let y = 40;
+            const lineSpacing = 10;
+
+            // Nombre
+            doc.text(`Nombre Completo:`, 20, y);
+            doc.setFont("helvetica", "bold");
+            doc.text(`${data.nombre} ${data.paterno} ${data.materno}`, 70, y);
+            
+            y += lineSpacing;
+            doc.setFont("helvetica", "normal");
+            
+            // CCT
+            doc.text(`Clave CCT:`, 20, y);
+            doc.setFont("helvetica", "bold");
+            doc.text(`${data.cct}`, 70, y);
+
+            y += lineSpacing;
+            doc.setFont("helvetica", "normal");
+
+            // Escuela
+            doc.text(`Escuela:`, 20, y);
+            doc.setFont("helvetica", "bold");
+            // Ajustamos texto si el nombre es muy largo
+            const splitSchool = doc.splitTextToSize(`${data.escuela}`, 120);
+            doc.text(splitSchool, 70, y);
+            
+            // Si el nombre de la escuela ocupó varias líneas, bajamos la Y más
+            if (splitSchool.length > 1) {
+                y += (lineSpacing * (splitSchool.length - 1));
+            }
+
+            // --- NUEVO CAMPO: ÁREA ---
+            y += lineSpacing;
+            doc.setFont("helvetica", "normal");
+            doc.text(`Área:`, 20, y);
+            doc.setFont("helvetica", "bold");
+            doc.text(`${data.area}`, 70, y);
+
+            // --- NUEVO CAMPO: FECHA DE EVENTO ---
+            y += lineSpacing;
+            doc.setFont("helvetica", "normal");
+            doc.text(`Fecha del Evento:`, 20, y);
+            doc.setFont("helvetica", "bold");
+            doc.text(`${data.fechaEvento}`, 70, y);
+
+            // Fecha de Registro
+            y += lineSpacing;
+            doc.setFont("helvetica", "normal");
+            doc.text(`Fecha y Hora de Registro:`, 20, y);
+            doc.setFont("helvetica", "bold");
+            doc.text(`${data.fechaHora}`, 90, y);
+
+            // Nota legal pequeña
+            y += 30;
+            doc.setFontSize(9);
+            doc.setTextColor(100);
+            const nota = "Este documento es un comprobante digital de la captura de información en el sistema. los datos personales servirán para fines estadísticos y comprobación de gastos de los recursos públicos utilizados para este evento. el aviso de privacidad integral fue puesto a la vista de cada una de las personas y puede ser consultado en el siguiente vínculo. https://inaipyucatan.org.mx/transparencia/Protegetusdatospersonales/AvisosdePrivacidad.aspx";
+            const splitTitle = doc.splitTextToSize(nota, 170);
+            doc.text(splitTitle, 20, y);
+
+            // Guardar el PDF
+            doc.save(`Comprobante_${data.paterno}_${data.nombre}.pdf`);
+            
+            showToast('PDF Generado. Preparando para nuevo registro...', 'success');
+
+            // --- NUEVO: LIMPIEZA AUTOMÁTICA DESPUÉS DE DESCARGAR ---
+            setTimeout(() => {
+                // 1. Limpiamos el formulario HTML
+                form.reset();
+                
+                // 2. Reseteamos el estado de la app (botones, validaciones)
+                resetFormState();
+                
+                // 3. Limpiamos la caché del CCT
+                cctInput.dataset.nombreCache = '';
+                cctInput.value = ''; // Limpiar el campo CCT visualmente
+
+                // 4. Ponemos el cursor listo para escribir el siguiente CCT
+                cctInput.focus();
+                
+                showToast('Listo para el siguiente registro', 'success');
+            }, 2000); // Espera 2 segundos para dar tiempo de ver el mensaje de éxito
+        });
+    </script>
 </body>
 </html>
