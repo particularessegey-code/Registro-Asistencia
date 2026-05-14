@@ -6,7 +6,7 @@
     <title>Registro de Asistentes - Escuelas Preescolares</title>
     <style>
         :root {
-            --primary-color: #2563eb;
+            --primary-color: #6c1d45;
             --primary-hover: #1d4ed8;
             --bg-color: #f3f4f6;
             --card-bg: #ffffff;
@@ -48,7 +48,7 @@
         }
 
         .subtitle {
-            color: #6b7280;
+            color: #6c1d45;
             font-size: 0.9rem;
             margin-top: 0.5rem;
         }
@@ -286,7 +286,7 @@
     <div class="container">
         <header>
             <h1>Registro de Asistencia</h1>
-            <p class="subtitle">REGISTRO CAPACITACIÓN PARA NIVEL PREESCOLAR AJUSTES DE MODELO ÚNICO DE ATENCIÓN INTEGRAL</p>
+            <p class="subtitle">Tercera Jornada de Capacitación, en la que se impartirá el tema: “Atención a la Diversidad: Acciones Clave para una Escuela Inclusiva”; el 8 de junio de 2026; dirigida a directores, docentes y psicólogos de escuelas particulares incorporadas a la Secretaría de Educación del Gobierno del Estado de Yucatán.</p>
             <!-- <p class="alerta">El registro finalizó para las escuelas de las áreas 1 a 26; solo el área 23 puede continuar con su registro.</p>-->
         </header>
 
@@ -299,7 +299,7 @@
                 <div class="form-group">
                     <label for="cct">Clave C.C.T.:</label>
                     <div style="display: flex; align-items: center;">
-                        <input type="text" id="cct" name="cct" class="texto-mayusculas" placeholder="Ej: 31PJN0000Z Escriba CCT y presione ENTER o TAB" required>
+                        <input type="text" id="cct" name="cct" class="texto-mayusculas" placeholder="Ej: 31PXX0000Z Escriba CCT y presione ENTER o TAB" required autofocus>
                         <div class="loader" id="cctLoader"></div>
                     </div>
                     <div id="cctFeedback" class="validation-msg"></div>
@@ -367,13 +367,24 @@
                         <input type="text" id="apellidoMaterno" name="apellidoMaterno" class="texto-mayusculas" required>
                     </div>
                 </div>
+                <!-- INICIO: NUEVO CAMPO FUNCIÓN -->
+                <div class="form-group">
+                    <label for="funcion">Función:</label>
+                    <select id="funcion" name="funcion" required>
+                        <option value="">-- Seleccione --</option>
+                        <option value="MAESTRO">MAESTRO(A)</option>
+                        <option value="DIRECTIVO">DIRECTIVO(A)</option>
+                        <option value="PSICOLOGO">PSICÓLOGO(A)</option>
+                    </select>
+                </div>
+                <!-- FIN: NUEVO CAMPO FUNCIÓN -->
 
                 <div class="form-group">
                     <label for="correo">Correo Electrónico:</label>
                     <input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com" required>
                     <div id="correoFeedback" class="validation-msg"></div>
                 </div>
-
+                 
                 <div class="form-group">
                     <label for="telefono">Número Telefónico (10 dígitos):</label>
                     <input type="tel" id="telefono" name="telefono" placeholder="XXX-XXXXXXX" maxlength="11" required>
@@ -431,7 +442,7 @@
         // ==========================================
         // CONFIGURACIÓN: PEGA AQUÍ TU URL DE APPS SCRIPT
         // ==========================================
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwl25zj-TTqWllIlJhZF4gT_Pc47ZkLdfb8qcx6biwoJp1bkZIJVBTk21CX98pDHMy1bw/exec"; 
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx_mMlcQrYCDFloXiADdE5IecynNAyfImXnTOSZnwg5xHLe83QQO7NRL3nlC_fQD_U9EQ/exec"; 
 
         // Referencias al DOM
         const cctInput = document.getElementById('cct');
@@ -626,6 +637,7 @@
             const nombre = document.getElementById('nombreAsistente').value.trim();
             const paterno = document.getElementById('apellidoPaterno').value.trim();
             const materno = document.getElementById('apellidoMaterno').value.trim();
+            const funcion = document.getElementById('funcion').value; // NUEVO
             const correo = document.getElementById('correo').value.trim();
             const telefono = document.getElementById('telefono').value.trim();
             const sexo = document.getElementById('sexo').value;
@@ -636,6 +648,11 @@
 
             if (!nombre || !paterno || !materno || !correo || !telefono) {
                 showToast('Por favor, llene todos los campos de texto.', 'error');
+                return;
+            }
+            // NUEVA VALIDACIÓN FUNCIÓN
+            if (!funcion) {
+                showToast('Por favor, seleccione la Función (Maestro, Directivo, Psicólogo).', 'error');
                 return;
             }
 
@@ -683,6 +700,7 @@
                 nombreAsistente: nombre,
                 apellidoPaterno: paterno,
                 apellidoMaterno: materno,
+                funcion: funcion, // NUEVO
                 correo: correo,
                 telefono: telefono,
                 sexo: sexo,
@@ -714,6 +732,7 @@
                     nombre: nombre,
                     paterno: paterno,
                     materno: materno,
+                    funcion: funcion, // NUEVO
                     escuela: camposEscuela.nombre.value,
                     cct: cctInput.value,
                     area: camposEscuela.area.value,         // NUEVO
@@ -794,6 +813,13 @@
             doc.setFont("helvetica", "bold");
             doc.text(`${data.nombre} ${data.paterno} ${data.materno}`, 70, y);
             
+            y += lineSpacing;
+            doc.setFont("helvetica", "normal");
+            // NUEVO: FUNCIÓN EN PDF
+            doc.text(`Función:`, 20, y);
+            doc.setFont("helvetica", "bold");
+            doc.text(`${data.funcion}`, 70, y);
+
             y += lineSpacing;
             doc.setFont("helvetica", "normal");
             
