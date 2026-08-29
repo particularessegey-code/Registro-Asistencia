@@ -1,113 +1,1010 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro Cerrado - Escuelas</title>
-    <style>
-        :root {
-            --primary-color: #6c1d45;
-            --bg-color: #f3f4f6;
-            --card-bg: #ffffff;
-            --text-color: #1f2937;
-            --error-color: #dc2626;
+<!DOCTYPE html>  
+<html lang="es">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Registro de Asistentes - Escuelas Particulares</title>  
+    <style>  
+        :root {  
+            --primary-color: #6c1d45;  
+            --primary-hover: #1d4ed8;  
+            --bg-color: #f3f4f6;  
+            --card-bg: #ffffff;  
+            --text-color: #1f2937;  
+            --border-color: #d1d5db;  
+            --error-color: #dc2626;  
+            --success-color: #16a34a;  
+            --warning-color: #f59e0b;
         }
 
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-            line-height: 1.5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh; /* Centra verticalmente en la pantalla */
+        body {  
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;  
+            background-color: var(--bg-color);  
+            color: var(--text-color);  
+            margin: 0;  
+            padding: 20px;  
+            line-height: 1.5;  
         }
 
-        .container {
-            max-width: 700px;
-            width: 100%;
-            background: var(--card-bg);
-            padding: 2.5rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            border-top: 8px solid var(--primary-color);
+        .container {  
+            max-width: 800px;  
+            margin: 0 auto;  
+            background: var(--card-bg);  
+            padding: 2rem;  
+            border-radius: 12px;  
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);  
         }
 
-        .closed-icon {
-            font-size: 4rem;
-            color: var(--error-color);
-            margin-bottom: 1rem;
-            display: block;
+        header {  
+            text-align: center;  
+            margin-bottom: 2rem;  
+            border-bottom: 2px solid var(--bg-color);  
+            padding-bottom: 1rem;  
         }
 
-        h1 {
-            color: var(--primary-color);
-            margin: 0 0 1rem 0;
-            font-size: 1.8rem;
+        h1 {  
+            color: var(--primary-color);  
+            margin: 0;  
+            font-size: 1.8rem;  
         }
 
-        .subtitle {
-            color: #4b5563;
-            font-size: 0.95rem;
-            margin-bottom: 2rem;
-            line-height: 1.6;
+        .subtitle {  
+            color: #6c1d45;  
+            font-size: 1.5rem;  
+            margin-top: 0.5rem;  
+        }  
+        .alerta {  
+            color: #F80000;  
+            font-size: 0.9rem;  
+            margin-top: 0.5rem;  
         }
 
-        .closed-banner {
+        form {  
+            display: grid;  
+            gap: 1.5rem;  
+        }
+
+        fieldset {  
+            border: 1px solid var(--border-color);  
+            border-radius: 8px;  
+            padding: 1.5rem;  
+            margin: 0;  
+            background-color: #fafafa;  
+        }
+
+        legend {  
+            font-weight: 600;  
+            padding: 0 0.5rem;  
+            color: var(--primary-color);  
+            font-size: 1.1rem;  
+        }
+
+        .form-group {  
+            display: grid;  
+            gap: 0.5rem;  
+            margin-bottom: 1rem;  
+        }
+
+        label {  
+            font-weight: 500;  
+            font-size: 0.9rem;  
+        }
+
+        input[type="text"],  
+        input[type="email"],  
+        input[type="tel"],  
+        select {  
+            padding: 0.75rem;  
+            border: 1px solid var(--border-color);  
+            border-radius: 6px;  
+            font-size: 1rem;  
+            transition: border-color 0.2s;  
+            width: 100%;  
+            box-sizing: border-box;  
+        }
+
+        input:focus, select:focus {  
+            outline: none;  
+            border-color: var(--primary-color);  
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);  
+        }
+
+        input[readonly] {  
+            background-color: #e5e7eb;  
+            cursor: not-allowed;  
+            color: #4b5563;  
+        }
+
+        .validation-msg {  
+            font-size: 0.85rem;  
+            min-height: 1.2em;  
+            margin-top: 0.2rem;  
+        }
+
+        .error { color: var(--error-color); }  
+        .success { color: var(--success-color); }
+        .warning { color: var(--warning-color); }
+
+        .radio-group {  
+            display: flex;  
+            gap: 1.5rem;  
+            margin-top: 0.5rem;  
+        }
+
+        .radio-item {  
+            display: flex;  
+            align-items: center;  
+            gap: 0.5rem;  
+        }
+
+        button[type="submit"] {  
+            background-color: var(--primary-color);  
+            color: white;  
+            border: none;  
+            padding: 1rem;  
+            border-radius: 6px;  
+            font-size: 1rem;  
+            font-weight: 600;  
+            cursor: pointer;  
+            transition: background-color 0.2s;  
+            width: 100%;  
+        }
+
+        button[type="submit"]:hover {  
+            background-color: var(--primary-hover);  
+        }
+
+        button[type="submit"]:disabled {  
+            background-color: #9ca3af;  
+            cursor: not-allowed;  
+        }
+
+        #school-data-section {  
+            display: none;  
+            opacity: 0;  
+            transition: opacity 0.5s ease-in-out;  
+        }
+
+        #school-data-section.visible {  
+            display: block;  
+            opacity: 1;  
+        }
+
+        #personal-data-section {  
+            display: none;  
+            opacity: 0;  
+            transition: opacity 0.5s ease-in-out;  
+        }
+
+        #personal-data-section.visible {  
+            display: block;  
+            opacity: 1;  
+        }
+
+        /* Mensaje de fecha vencida */
+        .fecha-vencida-alert {
             background-color: #fef2f2;
             border: 2px solid var(--error-color);
             border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
+            padding: 20px;
+            margin-top: 15px;
+            text-align: center;
+            animation: pulseBorder 2s ease-in-out infinite;
         }
-
-        .closed-banner h2 {
+        .fecha-vencida-alert h3 {
             color: var(--error-color);
-            margin: 0 0 0.5rem 0;
-            font-size: 1.5rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            margin: 0 0 8px 0;
+            font-size: 1.2rem;
         }
-
-        .closed-banner p {
-            color: #7f1d1d;
+        .fecha-vencida-alert p {
+            color: #4b5563;
             margin: 0;
-            font-size: 1.1rem;
-            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        @keyframes pulseBorder {
+            0%, 100% { border-color: var(--error-color); }
+            50% { border-color: #fca5a5; }
         }
 
-        .info-footer {
-            font-size: 0.85rem;
-            color: #9ca3af;
-            margin-top: 2rem;
+        #notification-area {  
+            position: fixed;  
+            bottom: 20px;  
+            right: 20px;  
+            z-index: 1000;  
+        }  
+          
+        .toast {  
+            background: #333;  
+            color: white;  
+            padding: 12px 24px;  
+            border-radius: 8px;  
+            margin-top: 10px;  
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);  
+            animation: slideIn 0.3s ease-out forwards;  
+            display: flex;  
+            align-items: center;  
+            gap: 10px;  
         }
-    </style>
-</head>
+
+        .toast.error { background: var(--error-color); }  
+        .toast.success { background: var(--success-color); }
+        .toast.warning { background: var(--warning-color); }
+
+        @keyframes slideIn {  
+            from { transform: translateX(100%); opacity: 0; }  
+            to { transform: translateX(0); opacity: 1; }  
+        }
+
+        .loader {  
+            display: none;  
+            border: 3px solid #f3f3f3;  
+            border-top: 3px solid var(--primary-color);  
+            border-radius: 50%;  
+            width: 20px;  
+            height: 20px;  
+            animation: spin 1s linear infinite;  
+            margin-left: 10px;  
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .school-grid {  
+            display: grid;  
+            grid-template-columns: 1fr;  
+            gap: 1rem;  
+        }  
+        @media(min-width: 600px) {  
+            .school-grid {  
+                grid-template-columns: 1fr 1fr;  
+            }  
+            .full-width {  
+                grid-column: span 2;  
+            }  
+        }  
+
+        #fechaEvento {  
+            color: #dc2626;  
+            font-weight: bold;  
+        }
+
+        #lugar {  
+            color: #dc2626;  
+            font-weight: bold;  
+        }
+
+        .privacy-notice {  
+            background-color: #fff8e1;  
+            border-left: 5px solid #ffc107;  
+            padding: 15px;  
+            margin-bottom: 20px;  
+            font-size: 0.85rem;  
+            color: #333;  
+            text-align: justify;  
+            line-height: 1.4;  
+        }
+
+        .privacy-notice p {  
+            margin: 5px 0;  
+        }
+
+        .privacy-notice a {  
+            color: #0d47a1;  
+            text-decoration: underline;  
+            font-weight: bold;  
+        }  
+
+        #downloadBtn {  
+            width: 100%;  
+            cursor: pointer;  
+            color: white;  
+            border: none;  
+            padding: 1rem;  
+            border-radius: 6px;  
+            font-size: 1rem;  
+            font-weight: 600;  
+            transition: background-color 0.2s;  
+        }
+
+        #downloadBtn:hover {  
+            background-color: #15803d;  
+        }
+    </style>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>  
+</head>  
 <body>
 
-    <div class="container">
-        <span class="closed-icon">🚫</span>
-        
-        <h1>Registro de Asistencia</h1>
-        
-        <p class="subtitle">
-            Tercera Jornada de Capacitación, en la que se impartirá el tema: “Atención a la Diversidad: Acciones Clave para una Escuela Inclusiva”; el 8 de junio de 2026; dirigida a directores, docentes y psicólogos de escuelas particulares incorporadas a la Secretaría de Educación del Gobierno del Estado de Yucatán.
-        </p>
+    <div class="container">  
+        <header>  
+            <h1>Registro de Asistencia</h1>  
+            <p class="subtitle">Capacitacion sobre el Modelo Único de Atención Integral (MUAI).</p>  
+            <p class="subtitle">PRIMARIA Y SECUNDARIA.</p>  
+        </header>
 
-        <div class="closed-banner">
-            <h2>Registro Cerrado</h2>
-            <p>Se ha alcanzado el cupo máximo de asistentes.</p>
-            <p style="font-size: 0.9rem; margin-top: 10px; font-weight: 400;">Agradecemos su interés y participación. Ya no se aceptan más inscripciones.</p>
-        </div>
+        <form id="registroForm" novalidate>  
+            <fieldset>  
+                <legend>1. Datos de la Escuela</legend>  
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">Ingrese la Clave CCT de la escuela para autocompletar los datos y presione ENTER, TAB o fuera de la casilla.</p>  
+                  
+                <div class="form-group">  
+                    <label for="cct">Clave C.C.T.:</label>  
+                    <div style="display: flex; align-items: center;">  
+                        <input type="text" id="cct" name="cct" class="texto-mayusculas" placeholder="Ej: 31PXX0000Z Escriba CCT y presione ENTER o TAB" required autofocus>  
+                        <div class="loader" id="cctLoader"></div>  
+                    </div>  
+                    <div id="cctFeedback" class="validation-msg"></div>  
+                </div>
 
-        <div class="info-footer">
-            <p>Departamento de Escuelas Particulares</p>
-        </div>
+                <div id="school-data-section" class="school-grid">  
+                    <div class="form-group full-width">  
+                        <label for="nombreEscuela">Nombre de la Escuela:</label>  
+                        <input type="text" id="nombreEscuela" name="nombreEscuela" readonly>  
+                    </div>  
+                    <div class="form-group">  
+                        <label for="nivel">Nivel:</label>  
+                        <input type="text" id="nivel" name="nivel" readonly>  
+                    </div>  
+                    <div class="form-group">  
+                        <label for="municipio">Municipio:</label>  
+                        <input type="text" id="municipio" name="municipio" readonly>  
+                    </div>  
+                    <div class="form-group">  
+                        <label for="localidad">Localidad:</label>  
+                        <input type="text" id="localidad" name="localidad" readonly>  
+                    </div>  
+                    <div class="form-group">  
+                        <label for="area">Área:</label>  
+                        <input type="text" id="area" name="area" readonly>  
+                    </div>  
+                    <div class="form-group">  
+                        <label for="visitador">Visitador:</label>  
+                        <input type="text" id="visitador" name="visitador" readonly>  
+                    </div>  
+                    <div class="form-group">  
+                        <label for="fechaEvento">Fecha Evento:</label>  
+                        <input type="text" id="fechaEvento" name="fechaEvento" readonly>  
+                    </div>  
+                    <div class="form-group">  
+                        <label for="lugar">Lugar:</label>  
+                        <input type="text" id="lugar" name="lugar" readonly>  
+                    </div>
+                </div>
+
+                <!-- Alerta de fecha vencida (se inyecta dinámicamente) -->
+                <div id="fechaVencidaContainer"></div>
+            </fieldset>
+
+            <fieldset id="personal-data-section">  
+                <legend>2. Datos del Asistente</legend>  
+                <div class="privacy-notice">  
+                    <p>LOS DATOS PERSONALES SERVIRÁN PARA FINES ESTADÍSTICOS Y COMPROBACIÓN DE GASTOS DE LOS RECURSOS PÚBLICOS UTILIZADOS PARA ESTE EVENTO;</p>  
+                    <p>  
+                        <a href="https://inaipyucatan.org.mx/transparencia/Protegetusdatospersonales/AvisosdePrivacidad.aspx" target="_blank">  
+                            Consultar Aviso de Privacidad Completo (Click aquí)  
+                        </a>  
+                    </p>  
+                </div>  
+                  
+                <div class="form-group">  
+                    <label for="nombreAsistente">Nombres sin Apellidos:</label>  
+                    <input type="text" id="nombreAsistente" name="nombreAsistente" class="texto-mayusculas" required>  
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">  
+                    <div class="form-group">  
+                        <label for="apellidoPaterno">Apellido Paterno:</label>  
+                        <input type="text" id="apellidoPaterno" name="apellidoPaterno" class="texto-mayusculas" required>  
+                    </div>  
+                    <div class="form-group">  
+                        <label for="apellidoMaterno">Apellido Materno:</label>  
+                        <input type="text" id="apellidoMaterno" name="apellidoMaterno" class="texto-mayusculas" required>  
+                    </div>  
+                </div>  
+
+                <div class="form-group">  
+                    <label for="funcion">Función:</label>  
+                    <select id="funcion" name="funcion" required>  
+                        <option value="">-- Seleccione --</option>  
+                        <option value="MAESTRO">MAESTRO(A)</option>  
+                        <option value="DIRECTIVO">DIRECTIVO(A)</option>  
+                        <option value="PSICOLOGO">PSICÓLOGO(A)</option>  
+                        <option value="OTRO">OTRO</option>  
+                    </select>  
+                </div>  
+
+                <div class="form-group">  
+                    <label for="correo">Correo Electrónico:</label>  
+                    <input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com" required>  
+                    <div id="correoFeedback" class="validation-msg"></div>  
+                </div>  
+                   
+                <div class="form-group">  
+                    <label for="telefono">Número Telefónico (10 dígitos):</label>  
+                    <input type="tel" id="telefono" name="telefono" placeholder="XXX-XXXXXXX" maxlength="11" required>  
+                    <small style="color: #666;">Formato: Lada (3) + Número (7)</small>  
+                    <div id="telefonoFeedback" class="validation-msg"></div>  
+                </div>
+
+                <div class="form-group">  
+                    <label for="sexo">Sexo:</label>  
+                    <select id="sexo" name="sexo" required>  
+                        <option value="">-- Seleccione --</option>  
+                        <option value="HOMBRE">HOMBRE</option>  
+                        <option value="MUJER">MUJER</option>  
+                    </select>  
+                </div>
+
+                <div class="form-group">  
+                    <label>¿Habla alguna lengua indígena?</label>  
+                    <div class="radio-group">  
+                        <div class="radio-item">  
+                            <input type="radio" id="lenguaSi" name="lenguaIndigena" value="SI" required>  
+                            <label for="lenguaSi">SI</label>  
+                        </div>  
+                        <div class="radio-item">  
+                            <input type="radio" id="lenguaNo" name="lenguaIndigena" value="NO">  
+                            <label for="lenguaNo">NO</label>  
+                        </div>  
+                    </div>  
+                </div>
+
+                <div class="form-group">  
+                    <label>¿Presenta alguna discapacidad?</label>  
+                    <div class="radio-group">  
+                        <div class="radio-item">  
+                            <input type="radio" id="discapacidadSi" name="discapacidad" value="SI" required>  
+                            <label for="discapacidadSi">SI</label>  
+                        </div>  
+                        <div class="radio-item">  
+                            <input type="radio" id="discapacidadNo" name="discapacidad" value="NO">  
+                            <label for="discapacidadNo">NO</label>  
+                        </div>  
+                    </div>  
+                </div>
+
+                <button type="submit" id="submitBtn">Registrar Asistencia</button>  
+                <button type="button" id="downloadBtn" style="display: none; background-color: #16a34a; margin-top: 10px;">📥 Descargar Comprobante PDF</button>  
+            </fieldset>  
+        </form>  
     </div>
 
-</body>
+    <div id="notification-area"></div>
+
+    <script>  
+        // ===========================================  
+        // CONFIGURACIÓN: PEGA AQUÍ TU URL DE APPS SCRIPT  
+        // ===========================================  
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx_mMlcQrYCDFloXiADdE5IecynNAyfImXnTOSZnwg5xHLe83QQO7NRL3nlC_fQD_U9EQ/exec"; 
+
+        // Referencias al DOM  
+        const cctInput = document.getElementById('cct');  
+        const cctFeedback = document.getElementById('cctFeedback');  
+        const cctLoader = document.getElementById('cctLoader');  
+        const schoolSection = document.getElementById('school-data-section');  
+        const personalSection = document.getElementById('personal-data-section');  
+        const telefonoInput = document.getElementById('telefono');  
+        const telefonoFeedback = document.getElementById('telefonoFeedback');  
+        const form = document.getElementById('registroForm');  
+        const submitBtn = document.getElementById('submitBtn');
+        const fechaVencidaContainer = document.getElementById('fechaVencidaContainer');
+
+        // Campos de solo lectura para llenar (incluyendo LUGAR)
+        const camposEscuela = {  
+            nombre: document.getElementById('nombreEscuela'),  
+            nivel: document.getElementById('nivel'),  
+            municipio: document.getElementById('municipio'),  
+            localidad: document.getElementById('localidad'),  
+            area: document.getElementById('area'),  
+            visitador: document.getElementById('visitador'),  
+            fechaEvento: document.getElementById('fechaEvento'),
+            lugar: document.getElementById('lugar')
+        };
+
+        let escuelaValida = false;
+        let fechaVencida = false;
+
+        // ===========================================  
+// FUNCIÓN: Verificar si la fecha del evento ya pasó  
+// Soporta formatos: "29 de octubre", "5 de noviembre", "29/10/2025", etc.  
+// ===========================================  
+function esFechaVencida(fechaStr) {
+    if (!fechaStr) return false;
+
+    fechaStr = fechaStr.trim().toLowerCase();
+
+    // Mapeo completo de meses en español a número (0-11)
+    const meses = {
+        'enero': 0, 'febrero': 1, 'marzo': 2, 'abril': 3,
+        'mayo': 4, 'junio': 5, 'julio': 6, 'agosto': 7,
+        'septiembre': 8, 'octubre': 9, 'noviembre': 10, 'diciembre': 11
+    };
+
+    // --- Intentar formato texto: "29 de octubre" ---
+    const matchTexto = fechaStr.match(/^(\d{1,2})\s+de\s+(.+)$/);
+
+    if (matchTexto) {
+        const dia = parseInt(matchTexto[1]);
+        const nombreMes = matchTexto[2].trim();
+        const mes = meses[nombreMes];
+
+        if (mes !== undefined && dia >= 1 && dia <= 31) {
+            const anio = new Date().getFullYear(); // Toma el año actual automáticamente
+            // Pongo la hora al final del día: si el evento es "29 de octubre",
+            // se puede inscribir todo el día 29, y bloquea a partir del 30
+            const fechaEvento = new Date(anio, mes, dia, 23, 59, 59);
+
+            const hoy = new Date();
+            hoy.setHours(0, 0, 0, 0);
+
+            return fechaEvento < hoy;
+        }
+    }
+
+    // --- Fallback: formato numérico dd/mm/yyyy o dd-mm-yyyy ---
+    const partes = fechaStr.split(/[/\-\s]+/);
+    if (partes.length >= 3) {
+        const a = parseInt(partes[0]);
+        const b = parseInt(partes[1]);
+        const c = parseInt(partes[2]);
+
+        let fechaEvento;
+        if (a > 31) {
+            // Formato: yyyy/mm/dd
+            fechaEvento = new Date(c, b - 1, a);
+        } else {
+            // Formato: dd/mm/yyyy
+            fechaEvento = new Date(c, b - 1, a);
+        }
+
+        if (!isNaN(fechaEvento.getTime())) {
+            fechaEvento.setHours(23, 59, 59, 0);
+            const hoy = new Date();
+            hoy.setHours(0, 0, 0, 0);
+            return fechaEvento < hoy;
+        }
+    }
+
+    // Si no se pudo interpretar la fecha, NO bloquear (por seguridad)
+    return false;
+}
+
+        // ===========================================  
+        // FUNCIÓN CENTRALIZADA DE BÚSQUEDA  
+        // ===========================================  
+        async function buscarCCT() {  
+            const cct = cctInput.value.trim();
+
+            if (!cct) {  
+                resetFormState();  
+                return;  
+            }
+
+            if (escuelaValida && camposEscuela.nombre.value === cctInput.dataset.nombreCache) {  
+                return;  
+            }
+
+            cctLoader.style.display = 'block';  
+            cctFeedback.textContent = 'Buscando clave CCT...';  
+            cctFeedback.className = 'validation-msg';  
+              
+            try {  
+                const url = `${SCRIPT_URL}?cct=${encodeURIComponent(cct)}`;  
+                const response = await fetch(url);  
+                const result = await response.json();
+
+                if (result.success) {  
+                    // Llenar datos incluyendo LUGAR
+                    camposEscuela.nombre.value = result.data.nombre;  
+                    camposEscuela.nivel.value = result.data.nivel;  
+                    camposEscuela.municipio.value = result.data.municipio;  
+                    camposEscuela.localidad.value = result.data.localidad;  
+                    camposEscuela.area.value = result.data.area;  
+                    camposEscuela.visitador.value = result.data.visitador;  
+                    camposEscuela.fechaEvento.value = result.data.fechaEvento;
+                    camposEscuela.lugar.value = result.data.lugar;
+
+                    cctInput.dataset.nombreCache = result.data.nombre;
+
+                    // Mostrar sección de datos de escuela
+                    schoolSection.classList.add('visible');
+
+                    // ========================================
+                    // VALIDAR SI LA FECHA DEL EVENTO YA PASÓ
+                    // ========================================
+                    if (esFechaVencida(result.data.fechaEvento)) {
+                        fechaVencida = true;
+                        escuelaValida = false;
+
+                        // Mostrar alerta de fecha vencida
+                        fechaVencidaContainer.innerHTML = `
+                            <div class="fecha-vencida-alert">
+                                <h3>❌ Fecha de evento vencida</h3>
+                                <p>La fecha de este evento fue <strong>${result.data.fechaEvento}</strong>.</p>
+                                <p>Ya no es posible inscribirse para esta escuela.</p>
+                            </div>
+                        `;
+
+                        cctFeedback.textContent = '⚠️ La fecha de este evento ya pasó.';
+                        cctFeedback.className = 'validation-msg error';
+                        cctInput.style.borderColor = 'var(--error-color)';
+
+                        // NO mostrar sección personal
+                        personalSection.classList.remove('visible');
+
+                        showToast('La fecha del evento ya venció. No se permite el registro.', 'error');
+                    } else {
+                        fechaVencida = false;
+                        escuelaValida = true;
+                        fechaVencidaContainer.innerHTML = '';
+
+                        cctFeedback.textContent = '✅ Datos de escuela encontrados.';  
+                        cctFeedback.className = 'validation-msg success';  
+                        cctInput.style.borderColor = 'var(--success-color)';
+
+                        personalSection.classList.add('visible');  
+
+                        setTimeout(() => {  
+                            schoolSection.scrollIntoView({ behavior: 'smooth', block: 'start' });  
+                            document.getElementById('nombreAsistente').focus();  
+                        }, 500);
+                    }
+
+                } else {  
+                    throw new Error('No encontrado');  
+                }
+
+            } catch (error) {  
+                console.error(error);  
+                escuelaValida = false;  
+                fechaVencida = false;
+                resetFormState();  
+                cctFeedback.textContent = '❌ Clave CCT no encontrada. Verifíquela.';  
+                cctFeedback.className = 'validation-msg error';  
+                cctInput.style.borderColor = 'var(--error-color)';  
+                  
+            } finally {  
+                cctLoader.style.display = 'none';  
+            }  
+        }
+
+        // ===========================================  
+        // EVENTOS DEL INPUT CCT  
+        // ===========================================  
+        cctInput.addEventListener('blur', buscarCCT);
+
+        cctInput.addEventListener('keydown', (e) => {  
+            if (e.key === 'Enter') {  
+                e.preventDefault();  
+                buscarCCT();  
+            }  
+        });
+
+        cctInput.addEventListener('input', () => {  
+            if (escuelaValida || fechaVencida) {  
+                resetFormState();  
+                cctFeedback.textContent = '';  
+                cctInput.style.borderColor = 'var(--border-color)';  
+            }  
+        });
+
+        function resetFormState() {  
+            escuelaValida = false;  
+            fechaVencida = false;
+            schoolSection.classList.remove('visible');  
+            personalSection.classList.remove('visible');  
+              
+            Object.values(camposEscuela).forEach(input => input.value = '');  
+              
+            cctFeedback.textContent = '';          
+            cctFeedback.className = 'validation-msg'; 
+            cctInput.style.borderColor = 'var(--border-color)'; 
+
+            // Limpiar alerta de fecha vencida
+            fechaVencidaContainer.innerHTML = '';
+
+            const submitBtnLocal = document.getElementById('submitBtn');  
+            const downloadBtnLocal = document.getElementById('downloadBtn');  
+              
+            submitBtnLocal.style.display = 'block';  
+            submitBtnLocal.disabled = false;  
+            submitBtnLocal.textContent = 'Registrar Asistencia';  
+              
+            downloadBtnLocal.style.display = 'none';  
+        }  
+
+        // ===========================================  
+        // LÓGICA DE FORMATO DE TELÉFONO  
+        // ===========================================  
+        telefonoInput.addEventListener('input', (e) => {  
+            let value = e.target.value.replace(/\D/g, '');  
+            if (value.length > 10) value = value.slice(0, 10);  
+
+            if (value.length > 3) {  
+                e.target.value = `${value.slice(0, 3)}-${value.slice(3)}`;  
+            } else {  
+                e.target.value = value;  
+            }
+
+            if (value.length === 10) {  
+                telefonoFeedback.textContent = '✅ Formato correcto';  
+                telefonoFeedback.className = 'validation-msg success';  
+            } else {  
+                telefonoFeedback.textContent = 'Faltan dígitos (requiere 10)';  
+                telefonoFeedback.className = 'validation-msg error';  
+            }  
+        });
+
+        // ===========================================  
+        // ENVÍO DEL FORMULARIO  
+        // ===========================================  
+        form.addEventListener('submit', async (e) => {  
+            e.preventDefault();
+
+            // 1. Validar que la escuela sea válida Y que la fecha no esté vencida
+            if (!escuelaValida) {  
+                if (fechaVencida) {
+                    showToast('Error: La fecha del evento ya venció. No se permite el registro.', 'error');
+                } else {
+                    showToast('Error: Debe validar una escuela antes de enviar.', 'error');
+                }
+                cctInput.focus();  
+                return;  
+            }
+
+            // 2. Validación de Campos Vacíos  
+            const nombre = document.getElementById('nombreAsistente').value.trim();  
+            const paterno = document.getElementById('apellidoPaterno').value.trim();  
+            const materno = document.getElementById('apellidoMaterno').value.trim();  
+            const funcion = document.getElementById('funcion').value;  
+            const correo = document.getElementById('correo').value.trim();  
+            const telefono = document.getElementById('telefono').value.trim();  
+            const sexo = document.getElementById('sexo').value;  
+              
+            const lenguaRadio = document.querySelector('input[name="lenguaIndigena"]:checked');  
+            const discapacidadRadio = document.querySelector('input[name="discapacidad"]:checked');
+
+            if (!nombre || !paterno || !materno || !correo || !telefono) {  
+                showToast('Por favor, llene todos los campos de texto.', 'error');  
+                return;  
+            }  
+
+            if (!funcion) {  
+                showToast('Por favor, seleccione la Función (Maestro, Directivo, Psicólogo).', 'error');  
+                return;  
+            }
+
+            if (!sexo) {  
+                showToast('Por favor, seleccione el sexo.', 'error');  
+                return;  
+            }
+
+            if (!lenguaRadio) {  
+                showToast('Por favor, indique si habla alguna lengua indígena.', 'error');  
+                return;  
+            }
+
+            if (!discapacidadRadio) {  
+                showToast('Por favor, indique si presenta alguna discapacidad.', 'error');  
+                return;  
+            }
+
+            // 3. Validación de Teléfono  
+            const telefonoLimpio = telefono.replace(/\D/g, '');  
+            if (telefonoLimpio.length !== 10) {  
+                showToast('El teléfono debe tener exactamente 10 dígitos.', 'error');  
+                telefonoInput.focus();  
+                return;  
+            }
+
+            // 4. Validación de Correo  
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;  
+            if (!emailRegex.test(correo)) {  
+                showToast('Ingrese un correo electrónico válido.', 'error');  
+                document.getElementById('correo').focus();  
+                return;  
+            }
+
+            // Preparar datos (incluyendo LUGAR)
+            const formData = {  
+                cct: cctInput.value,  
+                nombre: camposEscuela.nombre.value,  
+                nivel: camposEscuela.nivel.value,  
+                municipio: camposEscuela.municipio.value,  
+                localidad: camposEscuela.localidad.value,  
+                area: camposEscuela.area.value,  
+                visitador: camposEscuela.visitador.value,  
+                fechaEvento: camposEscuela.fechaEvento.value,
+                lugar: camposEscuela.lugar.value,
+                nombreAsistente: nombre,  
+                apellidoPaterno: paterno,  
+                apellidoMaterno: materno,  
+                funcion: funcion,  
+                correo: correo,  
+                telefono: telefono,  
+                sexo: sexo,  
+                lenguaIndigena: lenguaRadio.value,  
+                discapacidad: discapacidadRadio.value  
+            };
+
+            // Estado de carga  
+            submitBtn.disabled = true;  
+            submitBtn.textContent = 'Enviando y enviando correo...';
+
+            try {  
+                const response = await fetch(SCRIPT_URL, {  
+                    method: 'POST',  
+                    body: JSON.stringify(formData)  
+                });  
+                  
+                const result = await response.json();
+
+                if (result.success) {  
+                    showToast('¡Registro exitoso! Los datos han sido guardados.', 'success');  
+                  
+                    submitBtn.style.display = 'none';  
+                    downloadBtn.style.display = 'block';
+
+                    // Guardar datos para PDF (incluyendo LUGAR)
+                    window.datosRegistro = {  
+                        nombre: nombre,  
+                        paterno: paterno,  
+                        materno: materno,  
+                        funcion: funcion,  
+                        escuela: camposEscuela.nombre.value,  
+                        cct: cctInput.value,  
+                        area: camposEscuela.area.value,  
+                        fechaEvento: camposEscuela.fechaEvento.value,
+                        lugar: camposEscuela.lugar.value,
+                        fechaHora: new Date().toLocaleString('es-MX')  
+                    };
+
+                } else {  
+                    if (result.message === "DUPLICADO") {  
+                        showToast('⚠️ Esta persona ya está registrada (Correo o Teléfono repetido).', 'error');  
+                    } else {  
+                        throw new Error('Error en el servidor');  
+                    }  
+                }
+
+            } catch (error) {  
+                console.error('Error submitting:', error);  
+                showToast('Hubo un error al conectar con Google Sheets. Intente nuevamente.', 'error');  
+            } finally {  
+                submitBtn.disabled = false;  
+                submitBtn.textContent = 'Registrar Asistencia';  
+            }  
+        });
+
+        // ===========================================  
+        // UTILIDAD: NOTIFICACIONES (TOASTS)  
+        // ===========================================  
+        function showToast(message, type = 'success') {  
+            const container = document.getElementById('notification-area');  
+            const toast = document.createElement('div');  
+            toast.className = `toast ${type}`;  
+              
+            const icon = type === 'success' ? '✅' : type === 'warning' ? '⚠️' : '⚠️';  
+              
+            toast.innerHTML = `<span>${icon}</span><span>${message}</span>`;  
+              
+            container.appendChild(toast);
+
+            setTimeout(() => {  
+                toast.style.opacity = '0';  
+                setTimeout(() => toast.remove(), 300);  
+            }, 4000);  
+        }  
+
+        // ===========================================  
+        // FUNCIÓN PARA GENERAR PDF (con LUGAR)  
+        // ===========================================  
+        const downloadBtn = document.getElementById('downloadBtn');  
+          
+        downloadBtn.addEventListener('click', () => {  
+            const { jsPDF } = window.jspdf;  
+            const doc = new jsPDF();  
+              
+            const data = window.datosRegistro;
+
+            // Header rojo guinda
+            doc.setFillColor(128, 0, 0);   
+            doc.rect(0, 0, 210, 20, 'F');  
+              
+            doc.setTextColor(255, 255, 255);  
+            doc.setFontSize(16);  
+            doc.text("COMPROBANTE DE REGISTRO", 105, 13, { align: "center" });
+
+            // Contenido
+            doc.setTextColor(0, 0, 0);  
+            doc.setFontSize(12);  
+              
+            let y = 40;  
+            const lineSpacing = 10;
+
+            // Nombre
+            doc.text(`Nombre Completo:`, 20, y);  
+            doc.setFont("helvetica", "bold");  
+            doc.text(`${data.nombre.toUpperCase()} ${data.paterno.toUpperCase()} ${data.materno.toUpperCase()}`, 70, y);  
+              
+            y += lineSpacing;  
+            doc.setFont("helvetica", "normal");  
+            // Función
+            doc.text(`Función:`, 20, y);  
+            doc.setFont("helvetica", "bold");  
+            doc.text(`${data.funcion}`, 70, y);
+
+            y += lineSpacing;  
+            doc.setFont("helvetica", "normal");  
+            // CCT
+            doc.text(`Clave CCT:`, 20, y);  
+            doc.setFont("helvetica", "bold");  
+            doc.text(`${data.cct.toUpperCase()}`, 70, y);
+
+            y += lineSpacing;  
+            doc.setFont("helvetica", "normal");
+            // Escuela
+            doc.text(`Escuela:`, 20, y);  
+            doc.setFont("helvetica", "bold");  
+            const splitSchool = doc.splitTextToSize(`${data.escuela}`, 120);  
+            doc.text(splitSchool, 70, y);  
+              
+            if (splitSchool.length > 1) {  
+                y += (lineSpacing * (splitSchool.length - 1));  
+            }
+
+            // Área
+            y += lineSpacing;  
+            doc.setFont("helvetica", "normal");  
+            doc.text(`Área:`, 20, y);  
+            doc.setFont("helvetica", "bold");  
+            doc.text(`${data.area}`, 70, y);
+
+            // Fecha del Evento
+            y += lineSpacing;  
+            doc.setFont("helvetica", "normal");  
+            doc.text(`Fecha del Evento:`, 20, y);  
+            doc.setFont("helvetica", "bold");  
+            doc.text(`${data.fechaEvento}`, 70, y);
+
+            // LUGAR (nuevo campo)
+            y += lineSpacing;  
+            doc.setFont("helvetica", "normal");  
+            doc.text(`Lugar:`, 20, y);  
+            doc.setFont("helvetica", "bold");  
+            const splitLugar = doc.splitTextToSize(`${data.lugar}`, 120);  
+            doc.text(splitLugar, 70, y);
+
+            if (splitLugar.length > 1) {
+                y += (lineSpacing * (splitLugar.length - 1));
+            }
+
+            // Fecha de Registro
+            y += lineSpacing;  
+            doc.setFont("helvetica", "normal");  
+            doc.text(`Fecha y Hora de Registro:`, 20, y);  
+            doc.setFont("helvetica", "bold");  
+            doc.text(`${data.fechaHora}`, 90, y);
+
+            // Nota legal
+            y += 30;  
+            doc.setFontSize(9);  
+            doc.setTextColor(100);  
+            const nota = "Este documento es un comprobante digital de la captura de información en el sistema. los datos personales servirán para fines estadísticos y comprobación de gastos de los recursos públicos utilizados para este evento. el aviso de privacidad integral fue puesto a la vista de cada una de las personas y puede ser consultado en el siguiente vínculo. https://inaipyucatan.org.mx/transparencia/Protegetusdatospersonales/AvisosdePrivacidad.aspx";  
+            const splitTitle = doc.splitTextToSize(nota, 170);  
+            doc.text(splitTitle, 20, y);
+
+            doc.save(`Comprobante_${data.paterno}_${data.nombre}.pdf`);  
+              
+            showToast('PDF Generado. Preparando para nuevo registro...', 'success');
+
+            setTimeout(() => {  
+                form.reset();  
+                resetFormState();  
+                cctInput.dataset.nombreCache = '';  
+                cctInput.value = '';  
+                cctInput.focus();  
+                showToast('Listo para el siguiente registro', 'success');  
+            }, 2000);  
+        });  
+    </script>  
+</body>  
 </html>
