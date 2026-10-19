@@ -518,6 +518,8 @@ function esFechaVencida(fechaStr) {
         'septiembre': 8, 'octubre': 9, 'noviembre': 10, 'diciembre': 11
     };
 
+    let fechaEventoObj = null;
+
     // --- Intentar formato texto: "29 de octubre" ---
     const matchTexto = fechaStr.match(/^(\d{1,2})\s+de\s+(.+)$/);
 
@@ -527,40 +529,48 @@ function esFechaVencida(fechaStr) {
         const mes = meses[nombreMes];
 
         if (mes !== undefined && dia >= 1 && dia <= 31) {
-            const anio = new Date().getFullYear(); // Toma el año actual automáticamente
-            // Pongo la hora al final del día: si el evento es "29 de octubre",
-            // se puede inscribir todo el día 29, y bloquea a partir del 30
-            const fechaEvento = new Date(anio, mes, dia, 23, 59, 59);
-
-            const hoy = new Date();
-            hoy.setHours(0, 0, 0, 0);
-
-            return fechaEvento < hoy;
+            const anio = new Date().getFullYear(); 
+            // Creamos la fecha del evento a las 23:59:59
+            fechaEventoObj = new Date(anio, mes, dia, 23, 59, 59);
         }
     }
 
     // --- Fallback: formato numérico dd/mm/yyyy o dd-mm-yyyy ---
-    const partes = fechaStr.split(/[/\-\s]+/);
-    if (partes.length >= 3) {
-        const a = parseInt(partes[0]);
-        const b = parseInt(partes[1]);
-        const c = parseInt(partes[2]);
+    if (!fechaEventoObj) {
+        const partes = fechaStr.split(/[/\-\s]+/);
+        if (partes.length >= 3) {
+            const a = parseInt(partes[0]);
+            const b = parseInt(partes[1]);
+            const c = parseInt(partes[2]);
 
-        let fechaEvento;
-        if (a > 31) {
-            // Formato: yyyy/mm/dd
-            fechaEvento = new Date(c, b - 1, a);
-        } else {
-            // Formato: dd/mm/yyyy
-            fechaEvento = new Date(c, b - 1, a);
-        }
+            let tempDate;
+            if (a > 31) {
+                // Formato: yyyy/mm/dd
+                tempDate = new Date(c, b - 1, a);
+            } else {
+                // Formato: dd/mm/yyyy
+                tempDate = new Date(c, b - 1, a);
+            }
 
-        if (!isNaN(fechaEvento.getTime())) {
-            fechaEvento.setHours(23, 59, 59, 0);
-            const hoy = new Date();
-            hoy.setHours(0, 0, 0, 0);
-            return fechaEvento < hoy;
+            if (!isNaN(tempDate.getTime())) {
+                tempDate.setHours(23, 59, 59, 0);
+                fechaEventoObj = tempDate;
+            }
         }
+    }
+
+    // Si logramos crear el objeto fecha, aplicamos la lógica de "Día Anterior"
+    if (fechaEventoObj) {
+        // RESTAMOS 1 DÍA a la fecha del evento para la comparación
+        // Esto hace que si el evento es el 25, la comparación sea contra el 24.
+        // Por lo tanto, cuando sea el 25 (hoy), la condición de "vencido" será verdadera.
+        fechaEventoObj.setDate(fechaEventoObj.getDate() - 1);
+
+        const hoy = new Date();
+        hoy.setHours(0, 0, 0, 0); // Normalizamos hoy a medianoche para comparar solo fechas
+
+        // Si la fecha del evento (menos 1 día) es menor que hoy, significa que ya llegamos al día del evento o pasamos.
+        return fechaEventoObj < hoy;
     }
 
     // Si no se pudo interpretar la fecha, NO bloquear (por seguridad)
@@ -617,9 +627,9 @@ function esFechaVencida(fechaStr) {
                         // Mostrar alerta de fecha vencida
                         fechaVencidaContainer.innerHTML = `
                             <div class="fecha-vencida-alert">
-                                <h3>❌ Fecha de evento vencida</h3>
-                                <p>La fecha de este evento fue <strong>${result.data.fechaEvento}</strong>.</p>
-                                <p>Ya no es posible inscribirse para esta escuela.</p>
+                                <h3>❌ Registro Cerrado</h3>
+                                <p><strong>El evento es hoy (${result.data.fechaEvento}), ya no te puedes registrar.</strong></p>
+                                <p>El cierre de registros fue el día de ayer a las 23:59.</p>
                             </div>
                         `;
 
